@@ -36,6 +36,9 @@ function MenuPage() {
                     <button className="btn-cart" onClick={() => navigate('/cart')}>
                         🛒 Кошик ({totalItems})
                     </button>
+                    <button className="btn-logout" onClick={() => navigate('/orders')}>
+                        📋 Замовлення
+                    </button>
                     <button className="btn-logout" onClick={() => { logout(); navigate('/'); }}>
                         Вийти
                     </button>

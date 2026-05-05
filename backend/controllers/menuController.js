@@ -58,9 +58,16 @@ const updateItem = async (req, res) => {
 const deleteItem = async (req, res) => {
     try {
         const { id } = req.params;
+
+        // Спочатку видаляємо пов'язані OrderItem
+        await prisma.orderItem.deleteMany({
+            where: { menuItemId: parseInt(id) }
+        });
+
         await prisma.menuItem.delete({
             where: { id: parseInt(id) }
         });
+
         res.json({ message: 'Позицію видалено' });
     } catch (error) {
         res.status(500).json({ message: 'Помилка сервера', error: error.message });

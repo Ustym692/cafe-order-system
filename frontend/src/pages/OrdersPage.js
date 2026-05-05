@@ -1,0 +1,82 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import api from '../api';
+import '../App.css';
+
+function OrdersPage() {
+    const [orders, setOrders] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchOrders = async () => {
+            try {
+                const res = await api.get('/orders/my');
+                setOrders(res.data);
+            } catch (err) {
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchOrders();
+    }, []);
+
+    const statusLabel = (status) => {
+        const labels = {
+            pending: '⏳ Очікує',
+            preparing: '👨‍🍳 Готується',
+            ready: '✅ Готово',
+            completed: '🎉 Виконано'
+        };
+        return labels[status] || status;
+    };
+
+    if (loading) return <p style={{ textAlign: 'center', marginTop: '100px' }}>Завантаження...</p>;
+
+    return (
+        <div className="cart-container">
+            <div className="cart-header">
+                <h1>📋 Мої замовлення</h1>
+                <button className="btn-logout" onClick={() => navigate('/menu')}>
+                    ← Назад до меню
+                </button>
+            </div>
+
+            {orders.length === 0 ? (
+                <p className="cart-empty">Замовлень ще немає 😔</p>
+            ) : (
+                orders.map(order => (
+                    <div key={order.id} className="order-card" style={{ marginBottom: '15px' }}>
+                        <div className="order-card-header">
+                            <div>
+                                <strong>Замовлення #{order.id}</strong>
+                                <p style={{ margin: '5px 0', color: '#6F4E37', fontWeight: 'bold' }}>
+                                    Сума: {order.totalPrice} грн
+                                </p>
+                                <p style={{ margin: '5px 0', fontSize: '14px', color: '#888' }}>
+                                    {order.items.map(i => `${i.menuItem.name} x${i.quantity}`).join(', ')}
+                                </p>
+                                <p style={{ margin: '5px 0', fontSize: '13px', color: '#999' }}>
+                                    {new Date(order.createdAt).toLocaleString('uk-UA')}
+                                </p>
+                            </div>
+                            <span style={{
+                                padding: '8px 16px',
+                                borderRadius: '20px',
+                                backgroundColor: '#f5f0eb',
+                                color: '#6F4E37',
+                                fontWeight: 'bold',
+                                fontSize: '14px'
+                            }}>
+                                {statusLabel(order.status)}
+                            </span>
+                        </div>
+                    </div>
+                ))
+            )}
+        </div>
+    );
+}
+
+export default OrdersPage;

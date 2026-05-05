@@ -6,6 +6,7 @@ import MenuPage from './pages/MenuPage';
 import CartPage from './pages/CartPage';
 import AdminPage from './pages/AdminPage';
 import RegisterPage from './pages/RegisterPage';
+import OrdersPage from './pages/OrdersPage';
 
 function PrivateRoute({ children }) {
   const { token } = useAuth();
@@ -24,6 +25,7 @@ function App() {
         <Route path="/" element={<LoginPage />} />
         <Route path="/menu" element={<PrivateRoute><MenuPage /></PrivateRoute>} />
         <Route path="/cart" element={<PrivateRoute><CartPage /></PrivateRoute>} />
+        <Route path="/orders" element={<PrivateRoute><OrdersPage /></PrivateRoute>} />
         <Route path="/admin" element={<PrivateRoute><AdminRoute><AdminPage /></AdminRoute></PrivateRoute>} />
         <Route path="/register" element={<RegisterPage />} />
       </Routes>

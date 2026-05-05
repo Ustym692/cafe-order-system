@@ -9,6 +9,7 @@ function AdminPage() {
     const [orders, setOrders] = useState([]);
     const [tab, setTab] = useState('menu');
     const [form, setForm] = useState({ name: '', description: '', price: '', category: '', imageUrl: '' });
+    const [editItem, setEditItem] = useState(null);
     const { logout } = useAuth();
     const navigate = useNavigate();
 
@@ -36,6 +37,29 @@ function AdminPage() {
             alert('Страву додано!');
         } catch (err) {
             alert('Помилка при додаванні');
+        }
+    };
+
+    const handleEditClick = (item) => {
+        setEditItem(item);
+    };
+
+    const handleUpdateItem = async (e) => {
+        e.preventDefault();
+        try {
+            await api.put(`/menu/${editItem.id}`, {
+                name: editItem.name,
+                description: editItem.description,
+                price: parseFloat(editItem.price),
+                category: editItem.category,
+                imageUrl: editItem.imageUrl,
+                available: editItem.available
+            });
+            setEditItem(null);
+            fetchMenu();
+            alert('Страву оновлено!');
+        } catch (err) {
+            alert('Помилка при оновленні');
         }
     };
 
@@ -76,6 +100,21 @@ function AdminPage() {
 
             {tab === 'menu' && (
                 <div>
+                    {editItem && (
+                        <div className="admin-form" style={{ marginBottom: '30px', border: '2px solid #6F4E37' }}>
+                            <h2 style={{ color: '#6F4E37' }}>Редагувати страву</h2>
+                            <form onSubmit={handleUpdateItem}>
+                                <input placeholder="Назва" value={editItem.name} onChange={e => setEditItem({ ...editItem, name: e.target.value })} required />
+                                <input placeholder="Опис" value={editItem.description || ''} onChange={e => setEditItem({ ...editItem, description: e.target.value })} />
+                                <input placeholder="Ціна" type="number" value={editItem.price} onChange={e => setEditItem({ ...editItem, price: e.target.value })} required />
+                                <input placeholder="Категорія" value={editItem.category} onChange={e => setEditItem({ ...editItem, category: e.target.value })} required />
+                                <div style={{ display: 'flex', gap: '10px' }}>
+                                    <button type="submit" className="btn-submit">Зберегти</button>
+                                    <button type="button" className="btn-delete" onClick={() => setEditItem(null)}>Скасувати</button>
+                                </div>
+                            </form>
+                        </div>
+                    )}
                     <h2 style={{ marginBottom: '15px', color: '#6F4E37' }}>Додати страву</h2>
                     <form onSubmit={handleAddItem} className="admin-form">
                         <input placeholder="Назва" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required />
@@ -111,7 +150,10 @@ function AdminPage() {
                                 <strong>{item.name}</strong> — {item.price} грн
                                 <p style={{ margin: '4px 0 0', color: '#888', fontSize: '14px' }}>{item.category}</p>
                             </div>
-                            <button className="btn-delete" onClick={() => handleDeleteItem(item.id)}>Видалити</button>
+                            <div style={{ display: 'flex', gap: '10px' }}>
+                                <button className="btn-submit" onClick={() => handleEditClick(item)}>Редагувати</button>
+                                <button className="btn-delete" onClick={() => handleDeleteItem(item.id)}>Видалити</button>
+                            </div>
                         </div>
                     ))}
                 </div>
