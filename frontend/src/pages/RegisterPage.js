@@ -1,28 +1,21 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
 import api from '../api';
 import '../App.css';
 
-function LoginPage() {
+function RegisterPage() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const { login } = useAuth();
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await api.post('/auth/login', { email, password });
-            login(response.data.token, response.data.role);
-            if (response.data.role === 'admin') {
-                navigate('/admin');
-            } else {
-                navigate('/menu');
-            }
+            await api.post('/auth/register', { email, password });
+            navigate('/');
         } catch (err) {
-            setError('Невірний email або пароль');
+            setError('Помилка реєстрації. Можливо цей email вже існує');
         }
     };
 
@@ -31,8 +24,9 @@ function LoginPage() {
             <div className="login-box">
                 <div style={{ textAlign: 'center', marginBottom: '20px' }}>
                     <h1 style={{ fontSize: '32px', color: '#6F4E37', marginBottom: '5px' }}>Кав'ярня «Аромат» ☕</h1>
-                    <p style={{ color: '#999', fontSize: '18px' }}>Ласкаво просимо! Увійдіть щоб зробити замовлення</p>
+                    <p style={{ color: '#999', fontSize: '14px' }}>Створіть акаунт щоб робити замовлення</p>
                 </div>
+                <h2>Реєстрація</h2>
                 {error && <p className="login-error">{error}</p>}
                 <form onSubmit={handleSubmit}>
                     <input
@@ -50,16 +44,16 @@ function LoginPage() {
                         required
                     />
                     <button type="submit" className="login-btn">
-                        Увійти
+                        Зареєструватись
                     </button>
                 </form>
                 <p style={{ textAlign: 'center', marginTop: '15px', fontSize: '14px', color: '#888' }}>
-                    Немає акаунту?{' '}
+                    Вже є акаунт?{' '}
                     <span
-                        onClick={() => navigate('/register')}
+                        onClick={() => navigate('/')}
                         style={{ color: '#6F4E37', cursor: 'pointer', fontWeight: 'bold' }}
                     >
-                        Зареєструватись
+                        Увійти
                     </span>
                 </p>
             </div>
@@ -67,4 +61,4 @@ function LoginPage() {
     );
 }
 
-export default LoginPage;
+export default RegisterPage;

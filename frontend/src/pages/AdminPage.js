@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../api';
+import '../App.css';
 
 function AdminPage() {
     const [items, setItems] = useState([]);
@@ -50,27 +51,24 @@ function AdminPage() {
     };
 
     return (
-        <div style={{ maxWidth: '900px', margin: '0 auto', padding: '20px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+        <div className="admin-container">
+            <div className="admin-header">
                 <h1>⚙️ Адмін-панель</h1>
-                <button
-                    onClick={() => { logout(); navigate('/'); }}
-                    style={{ padding: '10px 20px', backgroundColor: '#999', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '5px' }}
-                >
+                <button className="btn-logout" onClick={() => { logout(); navigate('/'); }}>
                     Вийти
                 </button>
             </div>
 
-            <div style={{ marginBottom: '20px' }}>
+            <div className="admin-tabs">
                 <button
+                    className={`tab-btn ${tab === 'menu' ? 'active' : 'inactive'}`}
                     onClick={() => setTab('menu')}
-                    style={{ marginRight: '10px', padding: '10px 20px', backgroundColor: tab === 'menu' ? '#6F4E37' : '#ddd', color: tab === 'menu' ? 'white' : 'black', border: 'none', cursor: 'pointer', borderRadius: '5px' }}
                 >
                     Меню
                 </button>
                 <button
+                    className={`tab-btn ${tab === 'orders' ? 'active' : 'inactive'}`}
                     onClick={() => setTab('orders')}
-                    style={{ padding: '10px 20px', backgroundColor: tab === 'orders' ? '#6F4E37' : '#ddd', color: tab === 'orders' ? 'white' : 'black', border: 'none', cursor: 'pointer', borderRadius: '5px' }}
                 >
                     Замовлення
                 </button>
@@ -78,24 +76,42 @@ function AdminPage() {
 
             {tab === 'menu' && (
                 <div>
-                    <h2>Додати страву</h2>
-                    <form onSubmit={handleAddItem} style={{ marginBottom: '30px', display: 'grid', gap: '10px' }}>
-                        <input placeholder="Назва" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} style={{ padding: '10px', fontSize: '16px' }} required />
-                        <input placeholder="Опис" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} style={{ padding: '10px', fontSize: '16px' }} />
-                        <input placeholder="Ціна" type="number" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} style={{ padding: '10px', fontSize: '16px' }} required />
-                        <input placeholder="Категорія" value={form.category} onChange={e => setForm({ ...form, category: e.target.value })} style={{ padding: '10px', fontSize: '16px' }} required />
-                        <input placeholder="URL фото" value={form.imageUrl} onChange={e => setForm({ ...form, imageUrl: e.target.value })} style={{ padding: '10px', fontSize: '16px' }} />
-                        <button type="submit" style={{ padding: '10px', backgroundColor: '#6F4E37', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '5px', fontSize: '16px' }}>Додати</button>
+                    <h2 style={{ marginBottom: '15px', color: '#6F4E37' }}>Додати страву</h2>
+                    <form onSubmit={handleAddItem} className="admin-form">
+                        <input placeholder="Назва" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} required />
+                        <input placeholder="Опис" value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} />
+                        <input placeholder="Ціна" type="number" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })} required />
+                        <input placeholder="Категорія" value={form.category} onChange={e => setForm({ ...form, category: e.target.value })} required />
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={async (e) => {
+                                const file = e.target.files[0];
+                                if (!file) return;
+                                const formData = new FormData();
+                                formData.append('image', file);
+                                try {
+                                    const res = await api.post('/upload', formData, {
+                                        headers: { 'Content-Type': 'multipart/form-data' }
+                                    });
+                                    setForm({ ...form, imageUrl: res.data.url });
+                                    alert('Фото завантажено!');
+                                } catch (err) {
+                                    alert('Помилка завантаження фото');
+                                }
+                            }}
+                        />
+                        <button type="submit" className="btn-submit">Додати</button>
                     </form>
 
-                    <h2>Список страв</h2>
+                    <h2 style={{ marginBottom: '15px', color: '#6F4E37' }}>Список страв</h2>
                     {items.map(item => (
-                        <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px', border: '1px solid #ddd', borderRadius: '10px', marginBottom: '10px' }}>
+                        <div key={item.id} className="admin-item">
                             <div>
                                 <strong>{item.name}</strong> — {item.price} грн
-                                <p style={{ margin: '5px 0 0', color: '#666', fontSize: '14px' }}>{item.category}</p>
+                                <p style={{ margin: '4px 0 0', color: '#888', fontSize: '14px' }}>{item.category}</p>
                             </div>
-                            <button onClick={() => handleDeleteItem(item.id)} style={{ padding: '8px 15px', backgroundColor: '#ff4444', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '5px' }}>Видалити</button>
+                            <button className="btn-delete" onClick={() => handleDeleteItem(item.id)}>Видалити</button>
                         </div>
                     ))}
                 </div>
@@ -103,21 +119,20 @@ function AdminPage() {
 
             {tab === 'orders' && (
                 <div>
-                    <h2>Замовлення</h2>
+                    <h2 style={{ marginBottom: '15px', color: '#6F4E37' }}>Замовлення</h2>
                     {orders.map(order => (
-                        <div key={order.id} style={{ padding: '15px', border: '1px solid #ddd', borderRadius: '10px', marginBottom: '10px' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div key={order.id} className="order-card">
+                            <div className="order-card-header">
                                 <div>
                                     <strong>Замовлення #{order.id}</strong> — {order.user?.email}
-                                    <p style={{ margin: '5px 0', color: '#6F4E37' }}>Сума: {order.totalPrice} грн</p>
-                                    <p style={{ margin: 0, fontSize: '14px', color: '#666' }}>
+                                    <p style={{ margin: '5px 0', color: '#6F4E37', fontWeight: 'bold' }}>Сума: {order.totalPrice} грн</p>
+                                    <p style={{ margin: 0, fontSize: '14px', color: '#888' }}>
                                         {order.items.map(i => `${i.menuItem.name} x${i.quantity}`).join(', ')}
                                     </p>
                                 </div>
                                 <select
                                     value={order.status}
                                     onChange={e => handleStatusChange(order.id, e.target.value)}
-                                    style={{ padding: '8px', borderRadius: '5px', fontSize: '14px' }}
                                 >
                                     <option value="pending">Очікує</option>
                                     <option value="preparing">Готується</option>

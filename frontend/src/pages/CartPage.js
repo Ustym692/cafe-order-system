@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import api from '../api';
+import '../App.css';
 
 function CartPage() {
     const { cart, removeFromCart, updateQuantity, clearCart, totalPrice } = useCart();
@@ -29,13 +30,11 @@ function CartPage() {
 
     if (ordered) {
         return (
-            <div style={{ textAlign: 'center', marginTop: '100px' }}>
+            <div className="order-success">
                 <h2>✅ Замовлення прийнято!</h2>
                 <p>Дякуємо за замовлення. Чекайте на своє замовлення ☕</p>
-                <button
-                    onClick={() => navigate('/menu')}
-                    style={{ padding: '10px 20px', backgroundColor: '#6F4E37', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '5px', fontSize: '16px' }}
-                >
+                <br />
+                <button className="btn-cart" onClick={() => navigate('/menu')}>
                     Повернутись до меню
                 </button>
             </div>
@@ -43,43 +42,36 @@ function CartPage() {
     }
 
     return (
-        <div style={{ maxWidth: '700px', margin: '0 auto', padding: '20px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
+        <div className="cart-container">
+            <div className="cart-header">
                 <h1>🛒 Кошик</h1>
-                <button
-                    onClick={() => navigate('/menu')}
-                    style={{ padding: '10px 20px', backgroundColor: '#999', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '5px' }}
-                >
+                <button className="btn-logout" onClick={() => navigate('/menu')}>
                     ← Назад до меню
                 </button>
             </div>
 
             {cart.length === 0 ? (
-                <p style={{ textAlign: 'center', color: '#666' }}>Кошик порожній</p>
+                <p className="cart-empty">Кошик порожній 😔</p>
             ) : (
                 <>
                     {cart.map(item => (
-                        <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '15px', border: '1px solid #ddd', borderRadius: '10px', marginBottom: '10px' }}>
-                            <div>
-                                <h3 style={{ margin: '0 0 5px' }}>{item.name}</h3>
-                                <p style={{ margin: 0, color: '#6F4E37' }}>{item.price} грн</p>
+                        <div key={item.id} className="cart-item">
+                            <div className="cart-item-info">
+                                <h3>{item.name}</h3>
+                                <p className="cart-item-price">{item.price} грн</p>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                <button onClick={() => updateQuantity(item.id, item.quantity - 1)} style={{ padding: '5px 10px', fontSize: '16px', cursor: 'pointer' }}>-</button>
-                                <span style={{ fontSize: '18px' }}>{item.quantity}</span>
-                                <button onClick={() => updateQuantity(item.id, item.quantity + 1)} style={{ padding: '5px 10px', fontSize: '16px', cursor: 'pointer' }}>+</button>
-                                <button onClick={() => removeFromCart(item.id)} style={{ padding: '5px 10px', backgroundColor: '#ff4444', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '5px' }}>✕</button>
+                            <div className="cart-item-controls">
+                                <button className="btn-qty" onClick={() => updateQuantity(item.id, item.quantity - 1)}>-</button>
+                                <span>{item.quantity}</span>
+                                <button className="btn-qty" onClick={() => updateQuantity(item.id, item.quantity + 1)}>+</button>
+                                <button className="btn-remove" onClick={() => removeFromCart(item.id)}>✕</button>
                             </div>
                         </div>
                     ))}
 
-                    <div style={{ marginTop: '20px', padding: '20px', backgroundColor: '#f9f9f9', borderRadius: '10px' }}>
-                        <h2 style={{ margin: '0 0 15px' }}>Разом: {totalPrice} грн</h2>
-                        <button
-                            onClick={handleOrder}
-                            disabled={loading}
-                            style={{ width: '100%', padding: '15px', backgroundColor: '#6F4E37', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '5px', fontSize: '18px' }}
-                        >
+                    <div className="cart-summary">
+                        <h2>Разом: {totalPrice} грн</h2>
+                        <button className="btn-order" onClick={handleOrder} disabled={loading}>
                             {loading ? 'Оформлення...' : 'Оформити замовлення'}
                         </button>
                     </div>

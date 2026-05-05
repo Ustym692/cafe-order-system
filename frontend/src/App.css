@@ -1,0 +1,386 @@
+/* ===== Сторінка реєстрації ===== */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f5f0eb 0%, #e8d5c4 100%);
+}
+
+.login-box {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(111, 78, 55, 0.15);
+  width: 100%;
+  max-width: 420px;
+}
+
+.login-box h2 {
+  text-align: center;
+  font-size: 28px;
+  color: #6F4E37;
+  margin-bottom: 30px;
+}
+
+.login-box input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 16px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid #d4b896;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 14px;
+  background-color: #6F4E37;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.login-error {
+  color: #e74c3c;
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+/* ===== Сторінка меню ===== */
+.menu-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+.menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.menu-header h1 {
+  font-size: 32px;
+  color: #6F4E37;
+}
+
+.menu-header-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-cart {
+  padding: 10px 20px;
+  background-color: #6F4E37;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.btn-logout {
+  padding: 10px 20px;
+  background-color: #999;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 25px;
+}
+
+.menu-card {
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(111, 78, 55, 0.1);
+  transition: transform 0.2s;
+}
+
+.menu-card:hover {
+  transform: translateY(-4px);
+}
+
+.menu-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.menu-card-body {
+  padding: 15px;
+}
+
+.menu-card-body h3 {
+  font-size: 18px;
+  margin-bottom: 6px;
+}
+
+.menu-card-body p {
+  color: #888;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.menu-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.menu-price {
+  font-size: 20px;
+  font-weight: bold;
+  color: #6F4E37;
+}
+
+.btn-add {
+  padding: 8px 16px;
+  background-color: #6F4E37;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+/* ===== Сторінка замовлення ===== */
+.cart-container {
+  max-width: 750px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+.cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.cart-header h1 {
+  font-size: 28px;
+  color: #6F4E37;
+}
+
+.cart-item {
+  background: white;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.cart-item-info h3 {
+  font-size: 17px;
+  margin-bottom: 4px;
+}
+
+.cart-item-price {
+  color: #6F4E37;
+  font-weight: bold;
+}
+
+.cart-item-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn-qty {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid #6F4E37;
+  background: white;
+  color: #6F4E37;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cart-item-controls span {
+  font-size: 18px;
+  font-weight: bold;
+  min-width: 24px;
+  text-align: center;
+}
+
+.btn-remove {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background-color: #ff4444;
+  color: white;
+  font-size: 14px;
+}
+
+.cart-summary {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.cart-summary h2 {
+  margin-bottom: 15px;
+  color: #6F4E37;
+}
+
+.btn-order {
+  width: 100%;
+  padding: 15px;
+  background-color: #6F4E37;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.cart-empty {
+  text-align: center;
+  color: #888;
+  margin-top: 60px;
+  font-size: 18px;
+}
+
+.order-success {
+  text-align: center;
+  margin-top: 100px;
+}
+
+.order-success h2 {
+  font-size: 28px;
+  color: #6F4E37;
+  margin-bottom: 15px;
+}
+
+/* ===== Сторінка адміна ===== */
+.admin-container {
+  max-width: 950px;
+  margin: 0 auto;
+  padding: 30px 20px;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.admin-header h1 {
+  font-size: 28px;
+  color: #6F4E37;
+}
+
+.admin-tabs {
+  margin-bottom: 25px;
+  display: flex;
+  gap: 10px;
+}
+
+.tab-btn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.tab-btn.active {
+  background-color: #6F4E37;
+  color: white;
+}
+
+.tab-btn.inactive {
+  background-color: #e8d5c4;
+  color: #6F4E37;
+}
+
+.admin-form {
+  background: white;
+  padding: 25px;
+  border-radius: 14px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+  display: grid;
+  gap: 12px;
+}
+
+.admin-form input {
+  padding: 12px 16px;
+  font-size: 15px;
+  border-radius: 8px;
+  border: 1px solid #d4b896;
+  width: 100%;
+}
+
+.btn-submit {
+  padding: 12px;
+  background-color: #6F4E37;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.admin-item {
+  background: white;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.btn-delete {
+  padding: 8px 16px;
+  background-color: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.order-card {
+  background: white;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-card select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #d4b896;
+  font-size: 14px;
+  background: white;
+}
