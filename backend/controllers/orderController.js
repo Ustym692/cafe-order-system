@@ -1,4 +1,5 @@
 const prisma = require('./prisma');
+const { sendOrderStatusEmail } = require('./emailService');
 
 const createOrder = async (req, res) => {
     try {
@@ -102,8 +103,19 @@ const updateOrderStatus = async (req, res) => {
 
         const order = await prisma.order.update({
             where: { id: parseInt(id) },
-            data: { status }
+            data: { status },
+            include: {
+                user: true
+            }
         });
+
+        // Надсилаємо email користувачу
+        await sendOrderStatusEmail(
+            order.user.email,
+            order.id,
+            status,
+            order.totalPrice
+        );
 
         res.json(order);
     } catch (error) {
