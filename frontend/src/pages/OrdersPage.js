@@ -9,18 +9,29 @@ function OrdersPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchOrders = async () => {
-            try {
-                const res = await api.get('/orders/my');
-                setOrders(res.data);
-            } catch (err) {
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        };
         fetchOrders();
     }, []);
+
+    const fetchOrders = async () => {
+        try {
+            const res = await api.get('/orders/my');
+            setOrders(res.data);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleCancel = async (orderId) => {
+        if (!window.confirm('Скасувати це замовлення?')) return;
+        try {
+            await api.delete(`/orders/${orderId}`);
+            fetchOrders();
+        } catch (err) {
+            alert(err.response?.data?.message || 'Помилка скасування');
+        }
+    };
 
     const statusLabel = (status) => {
         const labels = {
@@ -61,16 +72,34 @@ function OrdersPage() {
                                     {new Date(order.createdAt).toLocaleString('uk-UA')}
                                 </p>
                             </div>
-                            <span style={{
-                                padding: '8px 16px',
-                                borderRadius: '20px',
-                                backgroundColor: '#f5f0eb',
-                                color: '#6F4E37',
-                                fontWeight: 'bold',
-                                fontSize: '14px'
-                            }}>
-                                {statusLabel(order.status)}
-                            </span>
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '10px' }}>
+                                <span style={{
+                                    padding: '8px 16px',
+                                    borderRadius: '20px',
+                                    backgroundColor: '#f5f0eb',
+                                    color: '#6F4E37',
+                                    fontWeight: 'bold',
+                                    fontSize: '14px'
+                                }}>
+                                    {statusLabel(order.status)}
+                                </span>
+                                {order.status === 'pending' && (
+                                    <button
+                                        onClick={() => handleCancel(order.id)}
+                                        style={{
+                                            padding: '6px 14px',
+                                            backgroundColor: '#ff4444',
+                                            color: 'white',
+                                            border: 'none',
+                                            borderRadius: '8px',
+                                            cursor: 'pointer',
+                                            fontSize: '13px'
+                                        }}
+                                    >
+                                        Скасувати
+                                    </button>
+                                )}
+                            </div>
                         </div>
                     </div>
                 ))

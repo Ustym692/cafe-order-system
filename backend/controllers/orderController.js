@@ -123,4 +123,39 @@ const updateOrderStatus = async (req, res) => {
     }
 };
 
-module.exports = { createOrder, getUserOrders, getAllOrders, updateOrderStatus };
+const cancelOrder = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userId = req.user.userId;
+
+        const order = await prisma.order.findUnique({
+            where: { id: parseInt(id) }
+        });
+
+        if (!order) {
+            return res.status(404).json({ message: 'Замовлення не знайдено' });
+        }
+
+        if (order.userId !== userId) {
+            return res.status(403).json({ message: 'Доступ заборонено' });
+        }
+
+        if (order.status !== 'pending') {
+            return res.status(400).json({ message: 'Можна скасувати тільки замовлення зі статусом «Очікує»' });
+        }
+
+        await prisma.orderItem.deleteMany({
+            where: { orderId: parseInt(id) }
+        });
+
+        await prisma.order.delete({
+            where: { id: parseInt(id) }
+        });
+
+        res.json({ message: 'Замовлення скасовано' });
+    } catch (error) {
+        res.status(500).json({ message: 'Помилка сервера', error: error.message });
+    }
+};
+
+module.exports = { createOrder, getUserOrders, getAllOrders, updateOrderStatus, cancelOrder };
