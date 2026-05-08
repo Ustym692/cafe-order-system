@@ -3,9 +3,14 @@ const prisma = require('./prisma');
 // Отримати всі позиції меню
 const getAllItems = async (req, res) => {
     try {
-        const items = await prisma.menuItem.findMany({
-            where: { available: true }
-        });
+        const { category } = req.query;
+
+        const where = { available: true };
+        if (category) {
+            where.category = category;
+        }
+
+        const items = await prisma.menuItem.findMany({ where });
         res.json(items);
     } catch (error) {
         res.status(500).json({ message: 'Помилка сервера', error: error.message });
